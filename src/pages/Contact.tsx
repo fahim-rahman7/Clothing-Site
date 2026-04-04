@@ -24,7 +24,7 @@ const Contact = () => {
         "https://script.google.com/macros/s/AKfycbwNtM7FckUYxfDx0dEo0lclxLTuzFbMEEipPjN0J2Rc-IUyTpmL1X340QCh8sR_5dziFA/exec",
         {
           method: "POST",
-          body: "trigger", // you just need some body content
+          body: JSON.stringify(formData),
         }
       );
 
