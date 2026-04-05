@@ -19,13 +19,35 @@ const Checkout = () => {
     paymentMethod: 'cod'
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsOrdered(true);
-    setTimeout(() => {
-      clearCart();
-      navigate('/');
-    }, 5000);
+  
+    try {
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbzLxUNjUlwKbm383DIvIMSd8bcrVHrJKStnM8pevtDhMcYpoQTexPiQ8KqYeiYCawIZ/exec", // 👈 paste your URL here
+        {
+          method: "POST",
+
+          body: JSON.stringify({
+            ...formData,
+            totalPrice,
+          }),
+        }
+      );
+  
+      const data = await res.json();
+  
+      if (data.success) {
+        setIsOrdered(true);
+  
+        setTimeout(() => {
+          clearCart();
+          navigate("/");
+        }, 5000);
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
   };
 
   if (cart.length === 0 && !isOrdered) {
