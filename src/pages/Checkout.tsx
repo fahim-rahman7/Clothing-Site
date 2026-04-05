@@ -22,32 +22,28 @@ const Checkout = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
+    // ✅ Show popup instantly
+    setIsOrdered(true);
+  
+    // ✅ Send data in background (no blocking UI)
     try {
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbzLxUNjUlwKbm383DIvIMSd8bcrVHrJKStnM8pevtDhMcYpoQTexPiQ8KqYeiYCawIZ/exec", // 👈 paste your URL here
-        {
-          method: "POST",
+      await fetch("https://script.google.com/macros/s/AKfycbzLxUNjUlwKbm383DIvIMSd8bcrVHrJKStnM8pevtDhMcYpoQTexPiQ8KqYeiYCawIZ/exec", {
+        method: "POST",
 
-          body: JSON.stringify({
-            ...formData,
-            totalPrice,
-          }),
-        }
-      );
-  
-      const data = await res.json();
-  
-      if (data.success) {
-        setIsOrdered(true);
-  
-        setTimeout(() => {
-          clearCart();
-          navigate("/");
-        }, 5000);
-      }
+        body: JSON.stringify({
+          ...formData,
+          totalPrice,
+        }),
+      });
     } catch (error) {
       console.error("Error submitting order:", error);
     }
+  
+    // ✅ Redirect after 5 sec
+    setTimeout(() => {
+      clearCart();
+      navigate("/");
+    }, 5000);
   };
 
   if (cart.length === 0 && !isOrdered) {
